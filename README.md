@@ -10,7 +10,7 @@ I created this code to test if the reason Splatoon 3 internet disconnections, or
 
 In the sample file, experiment1.xlsx, two trials were run for five minutes each. One where no devices were actively on the network (devices were still connected running in the background), and another where one Nintendo Switch is connected and playing Splatoon 3. The data from every request is exported to excel, where I manually reported on the means and variance of the two samples. The data is approximately normal since we take a large amount of samples with a continous distribution. I tested the null hypothesis pictured below
 
-put an image with the math here
+<img src="https://github.com/user-attachments/assets/b31e925c-8b0f-48c4-8997-50867822dd3a" style="width:70%; height:auto;">
 
 Because of our conclusions we can determine that Splatoon 3 has a significant impact on the latency of the network for this trial. This makes sense because the program sends a new request as soon as the previous one is recieved. For the base trial, 1636 pings are recorded but while Splatoon 3 is running only 1078 are. This alone implies that the Splatoon 3 trial has a longer average time between request and response. 
 
