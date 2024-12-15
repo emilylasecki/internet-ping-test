@@ -1,9 +1,6 @@
 import datetime
 import time
 import pandas as pd
-import os
-import xlsxwriter
-
 from ping3 import ping
 
 filepath = "test2.xlsx" # Path to export data to
@@ -17,7 +14,7 @@ def test_round_trip(host):
             now = datetime.datetime.now()
             lag = latency *1000  # Convert latency from seconds to milliseconds
             print(f"{latency * 1000:.2f} ms {now}")
-            if latency*1000 > 0: # Set what you want to be recorded. If you only want to record when the ping spikes, change the threshold from 0 to 50 or more
+            if latency*1000 > 0: # Set what you want to be recorded. If you only want to record when the ping spikes, change the threshold from 0 to 50+
                 try:
                     old_df=pd.read_excel(filepath)
                     dict={'latency in ms': [lag], 'timestamp': [now], 'comment': [comment]}
@@ -29,7 +26,7 @@ def test_round_trip(host):
                     df = pd.DataFrame(dict)
                     df.to_excel(filepath, index=False, engine='openpyxl')
         else:
-            print("connection request timed out")
+            print("connection request timed out") # it takes longer than 4 seconds to find a connection. Typically from a bad request, not a ping spike
             
 
 
