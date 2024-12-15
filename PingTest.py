@@ -1,34 +1,37 @@
 import datetime
 import time
 import pandas as pd
+import os
+import xlsxwriter
 
 from ping3 import ping
 
-path = "test.xlsx"
+filepath = "test2.xlsx" # Path to export data to
 
 def test_round_trip(host):
     comment = input("write a comment about this session: ")
-    end_time = time.time() +300
+    end_time = time.time() +300 # 300 seconds = 5 minutes. Change this value for the test to run for a longer or shorter duration
     while time.time() < end_time:
-        # Perform a ping to the host
-        latency = ping(host, timeout=4)
-        
+        latency = ping(host, timeout=4) # Perform a ping to the host
         if latency is not None:
-            # Convert latency from seconds to milliseconds
             now = datetime.datetime.now()
-            lag = latency *1000
+            lag = latency *1000  # Convert latency from seconds to milliseconds
             print(f"{latency * 1000:.2f} ms {now}")
-            if latency*1000 > 0:
-                old_df=pd.read_excel(path)
-                dict={'latency in ms': [lag], 'timestamp': [now], 'comment': [comment]}
-                df = pd.DataFrame(dict)
-           # df.to_excel("pingexcel.xlsx")
-                new_df = pd.concat([old_df, df], ignore_index=True)
-                new_df.to_excel(path, index=False)
+            if latency*1000 > 0: # Set what you want to be recorded. If you only want to record when the ping spikes, change the threshold from 0 to 50 or more
+                try:
+                    old_df=pd.read_excel(filepath)
+                    dict={'latency in ms': [lag], 'timestamp': [now], 'comment': [comment]}
+                    df = pd.DataFrame(dict)
+                    new_df = pd.concat([old_df, df], ignore_index=True)
+                    new_df.to_excel(filepath, index=False, engine='openpyxl')
+                except: 
+                    dict={'latency in ms': [lag], 'timestamp': [now], 'comment': [comment]}
+                    df = pd.DataFrame(dict)
+                    df.to_excel(filepath, index=False, engine='openpyxl')
         else:
-            print("timed out")
+            print("connection request timed out")
             
 
 
 if __name__ == "__main__":
-    test_round_trip("google.com")
+    test_round_trip("google.com") # Change url if you want to ping a different internet address
